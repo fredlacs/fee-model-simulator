@@ -72,8 +72,8 @@ class SecondPriceAuction(AuctionMechanism, AuctionState):
         Winning bids should play price set in bid
         """
         # sort dictionary from highest to lowest bid
-        sortedBidders = sorted(bids, key=bids.get, reverse=True)
+        # sortedBidders = sorted(bids, key=bids.get, reverse=True)
         # shift every bid to the one lower
-
-        return bids
+        # return sortedBidders
+        return super().paymentRule(bids)
 

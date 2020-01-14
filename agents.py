@@ -17,9 +17,9 @@ class AbstractAuctioneerAgent:
         raise NotImplementedError("Not implemented")
 
 
-class RandomAuctioneerAgent(AbstractAuctioneerAgent):
+class NaiveAuctioneerAgent(AbstractAuctioneerAgent):
     """
-    Selects allocation rule randomly
+    Selects allocation rule naively, without optimising revenue
     """
 
     def __init__(self):
@@ -41,6 +41,9 @@ class KnapsackAuctioneerAgent(AbstractAuctioneerAgent):
         AbstractAuctioneerAgent.__init__(self)
 
     def selectWinningBids(self, bids, slots):
+        """
+        Selects highest bids
+        """
         # sort dictionary from highest to lowest bid then select n winners
         # winningBids = sorted(bids, key=bids.get, reverse=True)[:self.slotsPerAuction]
         # return {winner: bids[winner] for winner in winningBids}
@@ -61,9 +64,6 @@ class AbstractBidderAgent:
         Else return value of bid
         """
         raise NotImplementedError("Not implemented")
-
-    # def id(self):
-    #     return id(self)
 
 
 class FixedBidAgent(AbstractBidderAgent):
