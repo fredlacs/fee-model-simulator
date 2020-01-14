@@ -27,9 +27,21 @@ class NaiveAuctioneerAgent(AbstractAuctioneerAgent):
     
     def selectWinningBids(self, bids, slots):
         """
-        Selects first n slots as winning bids
+        Selects first n bids as winning bids
+        returns dict of bidder and winning bids
         """
-        return bids[:slots]
+        winningBids = {}
+        slotsUsed = 0
+
+        for bidder in bids.keys():
+            for bid in bids[bidder]:
+                if slotsUsed < slots:
+                    slotsUsed += 1
+                    try:
+                        winningBids[bidder].append(bid)
+                    except KeyError:
+                        winningBids[bidder] = [bid]
+        return winningBids
 
 
 class KnapsackAuctioneerAgent(AbstractAuctioneerAgent):

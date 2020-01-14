@@ -21,7 +21,10 @@ class AuctionState:
         return self.bids
     
     def addBid(self, bidder, bid):
-        self.bids[bidder].append(bid)
+        try:
+            self.bids[bidder].append(bid)
+        except KeyError:
+            self.bids[bidder] = [bid]
 
 
 class AuctionMechanism(AuctionState):
@@ -48,13 +51,12 @@ class AuctionMechanism(AuctionState):
         """
         raise NotImplementedError("Not implemented")
 
-    def executeAuctionRound(self, auctioneers, bidders, slots):
+    def executeAuctionRound(self, auctioneers, slots):
         """
-        Executes the end to end flow of a single auction and returns
+        Executes a single auction and returns
         dictionary of payments for each bidder to pay
         """
-        bids = [ bidder.getBid(self.getVisibleBids(bidder)) for bidder in bidders ]
-        winningBids = self.allocationRule(auctioneers, bids, slots)
+        winningBids = self.allocationRule(auctioneers, self.bids, slots)
         return self.paymentRule(winningBids)
 
 

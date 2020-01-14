@@ -11,7 +11,17 @@ def runAuctions(numIterations):
 
     for i in range(numIterations):
         print(f"Executing auction number {i+1}")
-        results = auction.executeAuctionRound(auctioneers, bidders, 10)
+
+        # 2 ticks to place bids
+        for bidder in bidders:
+            auction.addBid(bidder, bidder.getBid(auction.getVisibleBids(bidder)))
+
+        for bidder in bidders:
+            auction.addBid(bidder, bidder.getBid(auction.getVisibleBids(bidder)))
+
+        # auction executed and closed
+        results = auction.executeAuctionRound(auctioneers, 20)
+
         print(results)
 
 
