@@ -9,7 +9,7 @@ class AuctionState:
     """
 
     def __init__(self, prev=None): 
-        self.bids = prev.bids if prev else {}
+        self.bids = prev.bids if prev else []
 
     def getVisibleBids(self, agent):
         """
@@ -21,10 +21,7 @@ class AuctionState:
         return self.bids
     
     def addBid(self, bidder, bid):
-        try:
-            self.bids[bidder].append(bid)
-        except KeyError:
-            self.bids[bidder] = [bid]
+        self.bids.append((bidder, bid))
 
 
 class AuctionMechanism(AuctionState):
@@ -57,6 +54,8 @@ class AuctionMechanism(AuctionState):
         dictionary of payments for each bidder to pay
         """
         winningBids = self.allocationRule(auctioneers, self.bids, slots)
+        # remove winning bids
+        self.bids = [item for item in self.bids if item not in winningBids]
         return self.paymentRule(winningBids)
 
 

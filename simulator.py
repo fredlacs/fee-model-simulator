@@ -20,9 +20,10 @@ def runAuctions(numIterations):
             auction.addBid(bidder, bidder.getBid(auction.getVisibleBids(bidder)))
 
         # auction executed and closed
+        # print(auction.bids)
         results = auction.executeAuctionRound(auctioneers, 20)
-
-        print(results)
+        # print(auction.bids)
+        # print(results)
 
 
 if __name__ == '__main__':
