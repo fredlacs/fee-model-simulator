@@ -1,22 +1,5 @@
-#!/usr/bin/env python3
-# Define an auction and interface of classes that interact with it
+# Define auction
 # Author: Frederico Lacs
-
-class Agent:
-    """
-    Agent that participates in auction
-    """
-
-    def __init__(self):
-        raise NotImplementedError("Not implemented")
-
-    def getBid(self, visibleBids):
-        """
-        Agent does not want to bid return false
-        Else return value of bid
-        """
-        raise NotImplementedError("Not implemented")
-
 
 class AuctionMechanism:
     """
@@ -24,15 +7,20 @@ class AuctionMechanism:
     Which bids win, how much should they pay?
     """
 
-    def allocationRule(self, bids):
+    def __init__(self):
+        pass
+
+    def allocationRule(self, auctioneers, bids, slots):
         """
-        Which bids are winning
+        Selects first auctioneer from list and queries for the allocation.
+        Expects auctioneer to be AbstractAuctioneerAgent
         """
-        raise NotImplementedError("Not implemented")
+        return auctioneers[0].selectWinningBids(bids, slots)
 
     def paymentRule(self, bids):
         """
-        How much winning bids should pay
+        How much winning bids should pay.
+        This is determined by the protocol and auctioneers can't change.
         """
         raise NotImplementedError("Not implemented")
 
@@ -43,11 +31,8 @@ class AuctionState:
     What information about the state each agent has access to?
     """
 
-    def __init__(self, prev=None):
-        if(prev):
-            self.bids = prev.bids
-        else:
-            self.bids = {}
+    def __init__(self, prev=None): 
+        self.bids = prev.bids if prev else {}
 
     def getStateInformation(self, agent):
         """
@@ -55,3 +40,40 @@ class AuctionState:
         Not every agent has access to the same information on the state
         """
         raise NotImplementedError("Not implemented")
+
+
+class FirstPriceAuction(AuctionMechanism, AuctionState):
+    """
+    First price auction mechanism
+    """
+
+    def __init__(self, prev=None):
+        AuctionMechanism.__init__(self)
+        AuctionState.__init__(self, prev)
+
+    def paymentRule(self, bids):
+        """
+        Winning bids should play price set in bid
+        """
+        return bids
+
+
+class SecondPriceAuction(AuctionMechanism, AuctionState):
+    """
+    Second price auction mechanism
+    """
+
+    def __init__(self, prev=None):
+        AuctionMechanism.__init__(self)
+        AuctionState.__init__(self, prev)
+
+    def paymentRule(self, bids):
+        """
+        Winning bids should play price set in bid
+        """
+        # sort dictionary from highest to lowest bid
+        sortedBidders = sorted(bids, key=bids.get, reverse=True)
+        # shift every bid to the one lower
+
+        return bids
+
