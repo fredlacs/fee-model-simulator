@@ -12,18 +12,18 @@ def runAuctions(numIterations):
     for i in range(numIterations):
         print(f"Executing auction number {i+1}")
 
-        # 2 ticks to place bids
+        # 2 ticks for agents to place bids
         for bidder in bidders:
-            auction.addBid(bidder, bidder.getBid(auction.getVisibleBids(bidder)))
+            bid = bidder.getBid(auction.getVisibleBids(bidder))
+            if bid: auction.addBid(bidder, bid)
 
         for bidder in bidders:
-            auction.addBid(bidder, bidder.getBid(auction.getVisibleBids(bidder)))
+            bid = bidder.getBid(auction.getVisibleBids(bidder))
+            if bid: auction.addBid(bidder, bid)
 
-        # auction executed and closed
-        # print(auction.bids)
-        results = auction.executeAuctionRound(auctioneers, 20)
-        # print(auction.bids)
-        # print(results)
+        # execute auction after 2 rounds are given for bids to be placed
+        openSlots = 20
+        results = auction.executeAuctionRound(auctioneers, openSlots)
 
 
 if __name__ == '__main__':
@@ -31,9 +31,5 @@ if __name__ == '__main__':
 
     numIterations = 5
     runAuctions(numIterations)
-
-    # bidders = [  ]
-    # for bidder in bidders:
-    #     print(bidder.getBid(None))
 
     print("the end")

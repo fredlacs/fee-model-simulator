@@ -16,10 +16,9 @@ class AuctionState:
         Return information agent has access to from the state (ie other bids and their timestamps)
         Not every agent has access to the same information on the state
         """
-        # TODO: remove this error and do logic for state information
-        if not agent: raise NotImplementedError("No agent supplied")
+        # TODO: logic for state information
         return self.bids
-    
+
     def addBid(self, bidder, bid):
         self.bids.append((bidder, bid))
 
