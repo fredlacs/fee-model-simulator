@@ -23,7 +23,8 @@ class NaiveAuctioneerAgent(AbstractAuctioneerAgent):
     """
 
     def __init__(self):
-        AbstractAuctioneerAgent.__init__(self)
+        # AbstractAuctioneerAgent.__init__(self)
+        pass
     
     def selectWinningBids(self, bids, slots):
         """

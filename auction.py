@@ -1,6 +1,23 @@
 # Define auction
 # Author: Frederico Lacs
 
+class Bid:
+    def __init__(self, bidder, value):
+        # Storing as a tuple may be more efficient?
+        # 2d arrays will scale better when running many simulations
+        self.bidder = bidder
+        self.value = value
+    
+    def getBidder(self):
+        return self.bidder
+
+    def getValue(self):
+        return self.value
+
+    def updateBid(self, newValue):
+        self.value = newValue
+
+
 class AuctionState:
     """
     Defines state of an auction.
@@ -9,6 +26,7 @@ class AuctionState:
     """
 
     def __init__(self, prev=None): 
+        # TODO: store in a numpy array?
         self.bids = prev.bids if prev else []
 
     def getVisibleBids(self, agent):
@@ -20,7 +38,8 @@ class AuctionState:
         return self.bids
 
     def addBid(self, bidder, bid):
-        self.bids.append((bidder, bid))
+        # Double check this is a pass by reference
+        self.bids.append(Bid(bidder, bid))
 
 
 class AuctionMechanism(AuctionState):
@@ -37,8 +56,17 @@ class AuctionMechanism(AuctionState):
         Selects auctioneer to execute the auction then queries
         for its allocation rule.
         Expects auctioneer to be AbstractAuctioneerAgent
+
+        :param: slots number of bids that can be allocated
         """
-        return auctioneers[0].selectWinningBids(self=auctioneers[0], bids=bids, slots=slots)
+        # We assume a constant rational auctioneer as the focus
+        # of the simulations want to explore bidder behaviour
+        auctioneer = auctioneers[0]
+
+        # not all auctioneers can see all the same bids
+        visibleBids = self.getVisibleBids(auctioneer)
+
+        return auctioneer.selectWinningBids(visibleBids, slots)
 
     def paymentRule(self, bids):
         """

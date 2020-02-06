@@ -6,7 +6,7 @@ from auction import FirstPriceAuction
 
 def runAuctions(numIterations):
     auction = FirstPriceAuction()
-    auctioneers = [ NaiveAuctioneerAgent ]
+    auctioneers = [ NaiveAuctioneerAgent() ]
     bidders = [ FixedBidAgent(5),FixedBidAgent(3), FixedBidAgent(7) ]
 
     for i in range(numIterations):
