@@ -33,7 +33,7 @@ def runAuctions(numIterations):
 if __name__ == '__main__':
     print("starting simulations")
 
-    numIterations = 100
+    numIterations = 1000
     runAuctions(numIterations)
 
     print("the end")
