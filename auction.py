@@ -2,17 +2,25 @@
 # Author: Frederico Lacs
 
 class Bid:
-    def __init__(self, bidder, value):
+    def __init__(self, bidder, value, weight):
         # Storing as a tuple may be more efficient?
         # 2d arrays will scale better when running many simulations
+
+        # agent who placed the bid, an Ethereum externally owned account
         self.bidder = bidder
+        # the transaction fee paid by bidder (gasprice * gas used)
         self.value = value
+        # amount of gas used by the transaction
+        self.weight = weight
     
     def getBidder(self):
         return self.bidder
 
     def getValue(self):
         return self.value
+
+    def getWeight(self):
+        return self.weight
 
     def updateBid(self, newValue):
         self.value = newValue
@@ -37,9 +45,9 @@ class AuctionState:
         # TODO: logic for state information
         return self.bids
 
-    def addBid(self, bidder, bid):
+    def addBid(self, bidder, bid, weight):
         # Double check this is a pass by reference
-        self.bids.append(Bid(bidder, bid))
+        self.bids.append(Bid(bidder, bid, weight))
 
 
 class AuctionMechanism(AuctionState):
@@ -83,7 +91,16 @@ class AuctionMechanism(AuctionState):
         winningBids = self.allocationRule(auctioneers, self.bids, slots)
         # remove winning bids
         self.bids = [item for item in self.bids if item not in winningBids]
-        return self.paymentRule(winningBids)
+
+        payments = self.paymentRule(winningBids)
+
+        print("Allocation rule")
+        print([bid.getValue() for bid in winningBids])
+        print("Payment rule")
+        print([bid.getValue() for bid in payments])
+        # print(payments)
+
+        return payments
 
 
 class FirstPriceAuction(AuctionMechanism):

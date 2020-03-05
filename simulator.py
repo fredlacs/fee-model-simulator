@@ -7,19 +7,23 @@ from auction import FirstPriceAuction
 def runAuctions(numIterations):
     auction = FirstPriceAuction()
     auctioneers = [ NaiveAuctioneerAgent() ]
-    bidders = [ FixedBidAgent(5),FixedBidAgent(3), FixedBidAgent(7) ]
+    bidders = [ FixedBidAgent(5, 21000),FixedBidAgent(3, 21000), FixedBidAgent(7, 21000) ]
 
     for i in range(numIterations):
         print(f"Executing auction number {i+1}")
 
         # 2 ticks for agents to place bids
         for bidder in bidders:
-            bid = bidder.getBid(auction.getVisibleBids(bidder))
-            if bid: auction.addBid(bidder, bid)
+            bid, weight = bidder.getBid(auction.getVisibleBids(bidder))
+            if bid: auction.addBid(bidder, bid, weight)
 
         for bidder in bidders:
-            bid = bidder.getBid(auction.getVisibleBids(bidder))
-            if bid: auction.addBid(bidder, bid)
+            bid, weight = bidder.getBid(auction.getVisibleBids(bidder))
+            if bid: auction.addBid(bidder, bid, weight)
+        
+        for bidder in bidders:
+            bid, weight = bidder.getBid(auction.getVisibleBids(bidder))
+            if bid: auction.addBid(bidder, bid, weight)
 
         # execute auction after 2 rounds are given for bids to be placed
         openSlots = 20
@@ -29,7 +33,7 @@ def runAuctions(numIterations):
 if __name__ == '__main__':
     print("starting simulations")
 
-    numIterations = 5
+    numIterations = 100
     runAuctions(numIterations)
 
     print("the end")

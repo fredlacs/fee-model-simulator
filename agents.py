@@ -45,9 +45,12 @@ class KnapsackAuctioneerAgent(AbstractAuctioneerAgent):
         """
         Selects highest bids
         """
+        # naive approach w/o gas:
         # sort dictionary from highest to lowest bid then select n winners
         # winningBids = sorted(bids, key=bids.get, reverse=True)[:self.slotsPerAuction]
         # return {winner: bids[winner] for winner in winningBids}
+
+        # take into account bid weights when selecting winning bids
         return super().selectWinningBids(bids, slots)
 
 
@@ -69,26 +72,29 @@ class AbstractBidderAgent:
 
 class FixedBidAgent(AbstractBidderAgent):
     """
-    Agent bids a fixed value 50% of the time
+    Agent bids a fixed value, with a fixed weight
     """
 
-    def __init__(self, bid):
+    def __init__(self, bid, weight):
         self.fixedBid = bid
+        self.fixedWeight = weight
 
     def getBid(self, visibleBids):
-        from random import random
-        return self.fixedBid # if random() < 0.5 else False
+        return self.fixedBid, self.fixedWeight
 
 
 class MeanBidAgent(AbstractBidderAgent):
     """
     Agent bids the mean of visible bids
     """
-    def __init__(self):
-        pass
+
+    # TODO: use np's normal distribution for weight
+    def __init__(self, weight):
+        self.weight = weight
 
     def getBid(self, visibleBids):
         # returns mean of visible bids
-        return sum(visibleBids) / len(visibleBids)
+        bid = sum(visibleBids) / len(visibleBids)
+        return bid, self.weight
 
 
