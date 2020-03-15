@@ -12,7 +12,7 @@ def runAuctions(numIterations):
     for i in range(numIterations):
         print(f"Executing auction number {i+1}")
 
-        # 2 ticks for agents to place bids
+        # 3 ticks for agents to place bids
         for bidder in bidders:
             bid, weight = bidder.getBid(auction.getVisibleBids(bidder))
             if bid: auction.addBid(bidder, bid, weight)
@@ -25,7 +25,7 @@ def runAuctions(numIterations):
             bid, weight = bidder.getBid(auction.getVisibleBids(bidder))
             if bid: auction.addBid(bidder, bid, weight)
 
-        # execute auction after 2 rounds are given for bids to be placed
+        # execute auction after 3 rounds are given for bids to be placed
         openSlots = 20
         results = auction.executeAuctionRound(auctioneers, openSlots)
 
