@@ -1,23 +1,7 @@
 # Define bidder agent and their decision making process
 # Author: Frederico Lacs
 
-class AbstractBidderAgent:
-    """
-    Agent that participates in auction
-    """
-
-    def __init__(self):
-        raise NotImplementedError("Not implemented")
-
-    def getBid(self, visibleBids):
-        """
-        Agent does not want to bid return false
-        Else return value of bid
-        """
-        raise NotImplementedError("Not implemented")
-
-
-class FixedBidAgent(AbstractBidderAgent):
+class FixedBidAgent():
     """
     Agent bids a fixed value, with a fixed weight
     """
@@ -30,7 +14,7 @@ class FixedBidAgent(AbstractBidderAgent):
         return self.fixedBid, self.fixedWeight
 
 
-class MeanBidAgent(AbstractBidderAgent):
+class MeanBidAgent():
     """
     Agent bids the mean of visible bids
     """
@@ -41,5 +25,5 @@ class MeanBidAgent(AbstractBidderAgent):
 
     def getBid(self, visibleBids):
         # returns mean of visible bids
-        bid = sum(visibleBids) / len(visibleBids)
+        bid = sum(bid.weight for bid in visibleBids) / len(visibleBids)
         return bid, self.weight

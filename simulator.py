@@ -1,16 +1,21 @@
 #!/usr/bin/env python3
 # Author: Frederico Lacs
 
-from agents import FixedBidAgent, NaiveAuctioneerAgent
 from auction import FirstPriceAuction
+from population import createAuctioneerPopulation, createBidderPopulation
+
 
 def runAuctions(numIterations):
     auction = FirstPriceAuction()
-    auctioneers = [ NaiveAuctioneerAgent() ]
-    bidders = [ FixedBidAgent(5, 21000),FixedBidAgent(3, 21000), FixedBidAgent(7, 21000) ]
+    auctioneers = createAuctioneerPopulation()
+    bidders = createBidderPopulation()
+    # TODO: store output of simulation to csv
+    results = []
 
-    for i in range(numIterations):
-        print(f"Executing auction number {i+1}")
+    # Each iteration is one timestep of the simulation
+    for timestep in range(numIterations):
+        print(f"Executing auction number {timestep+1}")
+
 
         # 3 ticks for agents to place bids
         for bidder in bidders:
@@ -26,8 +31,23 @@ def runAuctions(numIterations):
             if bid: auction.addBid(bidder, bid, weight)
 
         # execute auction after 3 rounds are given for bids to be placed
-        openSlots = 20
-        results = auction.executeAuctionRound(auctioneers, openSlots)
+        for auctioneer in auctioneers:
+            visibleBids = auction.getVisibleBids(auctioneer)
+
+            winningBids = auctioneer.getAllocationRule(visibleBids, auction.weightLimit)
+            totalWeight = sum(bid.weight for bid in winningBids)
+
+            if(totalWeight > auction.weightLimit):
+                raise AssertionError("The total weight of the bids exceeds the weight allowed")
+            
+            # apply auction's payment rule on winning bids
+            paymentResult = auction.paymentRule(winningBids)
+            auction.removeWinningBids(winningBids)
+            
+            # store results
+            results.append([(timestep, res.value, res.weight) for res in paymentResult])
+        
+        print(results)
 
 
 if __name__ == '__main__':

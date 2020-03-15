@@ -1,47 +1,36 @@
 # Define auctioneer agent and their decision making process
 # Author: Frederico Lacs
+"""
+Agent that selects winning bids in an auction
+"""
 
-class AbstractAuctioneerAgent:
-    """
-    Agent that decides on the winning bids
-    """
-
-    def __init__(self):
-        raise NotImplementedError("Not implemented")
-
-    def selectWinningBids(self, bids, slots):
-        """
-        Return winning bids.
-        This is the allocation rule.
-        """
-        raise NotImplementedError("Not implemented")
-
-
-class NaiveAuctioneerAgent(AbstractAuctioneerAgent):
+class NaiveAuctioneerAgent():
     """
     Selects allocation rule naively, without optimising revenue
     """
 
     def __init__(self):
-        # AbstractAuctioneerAgent.__init__(self)
         pass
     
-    def selectWinningBids(self, bids, slots):
+    def getAllocationRule(self, bids, weightLimit):
         """
-        Selects first n bids as winning bids
+        Return winning bids.
+        This is the allocation rule.
+
+        Selects first 3 bids as winning bids
         """
-        return bids[:slots]
+        return bids[:3]
 
 
-class KnapsackAuctioneerAgent(AbstractAuctioneerAgent):
+class KnapsackAuctioneerAgent():
     """
     Knapsack optimisation on bids, currently with weight 1 on each bid
     """
 
     def __init__(self):
-        AbstractAuctioneerAgent.__init__(self)
+        pass
 
-    def selectWinningBids(self, bids, slots):
+    def getAllocationRule(self, bids, weightLimit):
         """
         Selects highest bids
         """
@@ -51,4 +40,4 @@ class KnapsackAuctioneerAgent(AbstractAuctioneerAgent):
         # return {winner: bids[winner] for winner in winningBids}
 
         # take into account bid weights when selecting winning bids
-        return super().selectWinningBids(bids, slots)
+        return super().getAllocationRule(bids, weightLimit)
