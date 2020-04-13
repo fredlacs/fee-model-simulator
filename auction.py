@@ -2,7 +2,7 @@
 # Author: Frederico Lacs
 
 class Bid:
-    def __init__(self, bidder, value, weight):
+    def __init__(self, bidder, value, weight, creationTimestep):
         # Storing as a tuple may be more efficient?
         # 2d arrays will scale better when running many simulations
 
@@ -12,6 +12,8 @@ class Bid:
         self.value = value
         # amount of gas used by the transaction
         self.weight = weight
+        # timestep in which bid was created
+        self.creationTimestep = creationTimestep
         # if payment, payment == (timestep from win, payment price)
         self.payment = False
 
@@ -40,9 +42,9 @@ class AuctionState:
         # TODO: logic for state information
         return self.bids
 
-    def addBid(self, bidder, bid, weight):
+    def addBid(self, bidder, bid, weight, creationTimestep):
         # Double check this is a pass by reference
-        self.bids.append(Bid(bidder, bid, weight))
+        self.bids.append(Bid(bidder, bid, weight, creationTimestep))
 
     def removeWinningBids(self, winningBids):
         self.bids = [item for item in self.bids if item not in winningBids]

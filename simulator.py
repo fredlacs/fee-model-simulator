@@ -3,32 +3,34 @@
 
 from auction import FirstPriceAuction
 from population import createAuctioneerPopulation, createBidderPopulation
+import csv
 
 
 def runAuctions(numIterations):
     auction = FirstPriceAuction()
     auctioneers = createAuctioneerPopulation()
     bidders = createBidderPopulation()
-    # TODO: store output of simulation to csv
-    results = []
+
+    csvfile = open('results.csv', 'w', newline='')
+    writer = csv.writer(csvfile, dialect='excel')
+    writer.writerow(["timestep", "bidValue", "bidWeight", "creationTimestep"])
 
     # Each iteration is one timestep of the simulation
     for timestep in range(numIterations):
         print(f"Executing auction number {timestep+1}")
 
-
         # 3 ticks for agents to place bids
         for bidder in bidders:
             bid, weight = bidder.getBid(auction.getVisibleBids(bidder))
-            if bid: auction.addBid(bidder, bid, weight)
+            if bid: auction.addBid(bidder, bid, weight, timestep)
 
         for bidder in bidders:
             bid, weight = bidder.getBid(auction.getVisibleBids(bidder))
-            if bid: auction.addBid(bidder, bid, weight)
+            if bid: auction.addBid(bidder, bid, weight, timestep)
         
         for bidder in bidders:
             bid, weight = bidder.getBid(auction.getVisibleBids(bidder))
-            if bid: auction.addBid(bidder, bid, weight)
+            if bid: auction.addBid(bidder, bid, weight, timestep)
 
         # execute auction after 3 rounds are given for bids to be placed
         for auctioneer in auctioneers:
@@ -45,9 +47,8 @@ def runAuctions(numIterations):
             auction.removeWinningBids(winningBids)
             
             # store results
-            results.append([(timestep, res.value, res.weight) for res in paymentResult])
-        
-        print(results)
+            for res in paymentResult:
+                writer.writerow([timestep, res.value, res.weight, res.creationTimestep])
 
 
 if __name__ == '__main__':
