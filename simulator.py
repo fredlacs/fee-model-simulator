@@ -3,20 +3,23 @@
 
 from auction import FirstPriceAuction
 from population import createAuctioneerPopulation, createBidderPopulation
-import csv
+import csv, click
 
 
-def runAuctions(numIterations):
+@click.command()
+@click.option("--outputfile", default="results.csv", help="Simulation output filename", type=str)
+@click.argument("iterations", type=int)
+def runAuctions(outputfile, iterations):
     auction = FirstPriceAuction()
     auctioneers = createAuctioneerPopulation()
     bidders = createBidderPopulation()
 
-    csvfile = open('results.csv', 'w', newline='')
+    csvfile = open(outputfile, 'w', newline='')
     writer = csv.writer(csvfile, dialect='excel')
     writer.writerow(["timestep", "bidValue", "bidWeight", "creationTimestep"])
 
     # Each iteration is one timestep of the simulation
-    for timestep in range(numIterations):
+    for timestep in range(iterations):
         print(f"Executing auction number {timestep+1}")
 
         # 3 ticks for agents to place bids
@@ -52,9 +55,4 @@ def runAuctions(numIterations):
 
 
 if __name__ == '__main__':
-    print("starting simulations")
-
-    numIterations = 1000
-    runAuctions(numIterations)
-
-    print("the end")
+    runAuctions()
