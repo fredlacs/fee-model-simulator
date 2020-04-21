@@ -26,4 +26,3 @@ class TestAuction:
     def test_payment_dictionary(self):
         auction = FirstPriceAuction()
         assert 1
-
