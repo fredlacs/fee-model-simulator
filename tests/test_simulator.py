@@ -11,3 +11,12 @@ def test_different_simulation_numbers():
 
   result = runner.invoke(runAuctions, ['1'])
   assert result.output == "Executing auction number 1\n"
+
+def test_csv_output():
+  runner = CliRunner()
+  result = runner.invoke(runAuctions, ['1', '--outputfile', 'resultsTest.csv'])
+  assert result.output == "Executing auction number 1\n"
+
+  file = open("resultsTest.csv", 'r', newline='')
+  assert "timestep,bidValue,bidWeight,creationTimestep" in file.read()
+

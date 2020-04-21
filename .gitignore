@@ -8,3 +8,4 @@ fee_simulator.egg-info
 .vscode
 build/
 dist/
+resultsTest.csv
