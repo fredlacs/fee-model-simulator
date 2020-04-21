@@ -2,26 +2,35 @@
 
 Tested on Python 3.7.7
 
-Run simulations
+How to run simulations
 
-Create a virtual envirtonment
+Create a Python virtual envirtonment to have a clean set of dependencies
 ```
 python3 -m venv env
 ```
 
+Activate the virtual envirtonment created
 ```
 source env/bin/activate
 ```
 
+Install the dependency list
 ```
 pip install -r requirements.txt
 ```
 
 
+CLI syntax
+```bash
 simulator.py [number of simulations] --outputfile [optional output filename] 
+```
 
 ```bash
 ./simulator.py 1000
 ./simulator.py 1000 --outputfile results2.csv
 ```
 
+To run tests
+```
+pytest
+```

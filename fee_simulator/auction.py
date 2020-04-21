@@ -28,11 +28,11 @@ class AuctionState:
     def __init__(self, prev=None): 
         # TODO: store in a numpy array?
         # bids to current open auction
-        self.bids = prev.bids if prev else []
+        self.bids = prev["bids"] if prev else []
         # bids that already won an auction
-        self.bidHistory = prev.bidHistory if prev else []
+        self.bidHistory = prev["bidHistory"] if prev else []
         # weight limit of bids allowed per auction
-        self.weightLimit = prev.weightLimit if prev else 11000000
+        self.weightLimit = prev["weightLimit"] if prev else 11000000
 
     def getVisibleBids(self, agent):
         """

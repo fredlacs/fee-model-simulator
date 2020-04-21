@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # Author: Frederico Lacs
 
-from auction import FirstPriceAuction
-from population import createAuctioneerPopulation, createBidderPopulation
+from fee_simulator.auction import FirstPriceAuction
+from fee_simulator.population import createAuctioneerPopulation, createBidderPopulation
 import csv, click
 
 
