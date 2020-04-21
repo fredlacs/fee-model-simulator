@@ -7,7 +7,8 @@ setup(
     include_package_data=True,
     install_requires=[
         'Click',
-        'ortools'
+        'ortools',
+        'matplotlib'
     ],
     entry_points='''
         [console_scripts]

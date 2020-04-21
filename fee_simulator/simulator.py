@@ -4,6 +4,7 @@
 from fee_simulator.auction import FirstPriceAuction
 from fee_simulator.population import createAuctioneerPopulation, createBidderPopulation
 import csv, click
+import matplotlib.pyplot as plt
 
 
 @click.command()
@@ -17,6 +18,7 @@ def run_auctions(outputfile, iterations):
     csvfile = open(outputfile, 'w', newline='')
     writer = csv.writer(csvfile, dialect='excel')
     writer.writerow(["Timestep", "BidValue", "BidWeight", "CreationTimestep"])
+    results = []
 
     # Each iteration is one timestep of the simulation
     for timestep in range(iterations):
@@ -47,11 +49,31 @@ def run_auctions(outputfile, iterations):
             
             # apply auction's payment rule on winning bids
             payment_result = auction.payment_rule(winning_bids)
+            # removes winning bids from current auction
             auction.remove_winning_bids(winning_bids)
             
             # store results
-            for res in payment_result:
-                writer.writerow([timestep, res.value, res.weight, res.creation_timestep])
+            for bid in winning_bids:
+                writer.writerow([timestep, bid.value, bid.weight, bid.creation_timestep])
+                results.append(bid)
+    
+    # data visualisation
+    x = [ bid.creation_timestep for bid in results ]
+    y = []
+
+    import statistics
+    for timestep in x:
+        average_weight_per_timestep = [ bid.weight for bid in results if bid.creation_timestep == timestep ]
+        y.append(sum(average_weight_per_timestep))
+
+    plt.plot(x, y, label='Total gas used per block')
+    plt.xlabel('Timestep')
+    plt.ylabel('Total Weight of winning bids')
+    plt.title('Auction simulation results')
+    plt.legend()
+    
+    plt.show()
+
 
 
 if __name__ == '__main__':
