@@ -60,11 +60,11 @@ def run_auctions(outputfile, graph, iterations):
     
     # data visualisation
     if graph:
-        x = [ bid.creation_timestep for bid in results ]
+        x = [ bid.creation_timestep+1 for bid in results ]
         y = []
 
         import statistics
-        for timestep in x:
+        for timestep in results:
             average_weight_per_timestep = [ bid.weight for bid in results if bid.creation_timestep == timestep ]
             y.append(sum(average_weight_per_timestep))
 
