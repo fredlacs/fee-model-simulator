@@ -9,8 +9,9 @@ import matplotlib.pyplot as plt
 
 @click.command()
 @click.option("--outputfile", default="results.csv", help="Simulation output filename", type=str)
+@click.option('--graph', is_flag=True)
 @click.argument("iterations", type=int)
-def run_auctions(outputfile, iterations):
+def run_auctions(outputfile, graph, iterations):
     auction = FirstPriceAuction()
     auctioneers = createAuctioneerPopulation()
     bidders = createBidderPopulation()
@@ -58,21 +59,22 @@ def run_auctions(outputfile, iterations):
                 results.append(bid)
     
     # data visualisation
-    x = [ bid.creation_timestep for bid in results ]
-    y = []
+    if graph:
+        x = [ bid.creation_timestep for bid in results ]
+        y = []
 
-    import statistics
-    for timestep in x:
-        average_weight_per_timestep = [ bid.weight for bid in results if bid.creation_timestep == timestep ]
-        y.append(sum(average_weight_per_timestep))
+        import statistics
+        for timestep in x:
+            average_weight_per_timestep = [ bid.weight for bid in results if bid.creation_timestep == timestep ]
+            y.append(sum(average_weight_per_timestep))
 
-    plt.plot(x, y, label='Total gas used per block')
-    plt.xlabel('Timestep')
-    plt.ylabel('Total Weight of winning bids')
-    plt.title('Auction simulation results')
-    plt.legend()
-    
-    plt.show()
+        plt.plot(x, y, label='Total gas used per block')
+        plt.xlabel('Timestep')
+        plt.ylabel('Total Weight of winning bids')
+        plt.title('Auction simulation results')
+        plt.legend()
+
+        plt.show()
 
 
 
