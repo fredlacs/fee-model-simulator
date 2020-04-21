@@ -14,23 +14,30 @@ Activate the virtual envirtonment created
 source env/bin/activate
 ```
 
-Install the dependency list
+Install the CLI application
 ```
-pip install -r requirements.txt
+python3 setup.py install
 ```
 
 
 CLI syntax
 ```bash
-simulator.py [number of simulations] --outputfile [optional output filename] 
+feesim [number of simulations] --outputfile [optional output filename] 
 ```
 
 ```bash
-./simulator.py 1000
-./simulator.py 1000 --outputfile results2.csv
+feesim 1000
+feesim 1000 --outputfile results2.csv
 ```
 
-To run tests
+
+## Test Cases
+First install pytest
+```
+pip install pytest
+```
+
+Execute unit and integration tests
 ```
 pytest
 ```

@@ -4,3 +4,7 @@ __pycache__/
 *$py.class
 results.csv
 env/
+fee_simulator.egg-info
+.vscode
+build/
+dist/

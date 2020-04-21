@@ -34,7 +34,7 @@ class AuctionState:
         # weight limit of bids allowed per auction
         self.weightLimit = prev["weightLimit"] if prev else 11000000
 
-    def getVisibleBids(self, agent):
+    def get_visible_bids(self, agent):
         """
         Return information agent has access to from the state (ie other bids and their timestamps)
         Not every agent has access to the same information on the state
@@ -42,11 +42,11 @@ class AuctionState:
         # TODO: logic for state information
         return self.bids
 
-    def addBid(self, bidder, bid, weight, creationTimestep):
+    def add_bid(self, bidder, bid, weight, creationTimestep):
         # Double check this is a pass by reference
         self.bids.append(Bid(bidder, bid, weight, creationTimestep))
 
-    def removeWinningBids(self, winningBids):
+    def remove_winning_bids(self, winningBids):
         self.bids = [item for item in self.bids if item not in winningBids]
 
 
@@ -59,7 +59,7 @@ class FirstPriceAuction(AuctionState):
     def __init__(self, prev=None):
         AuctionState.__init__(self, prev)
 
-    def paymentRule(self, winningBids):
+    def payment_rule(self, winningBids):
         """
         Closes the auction and returns dictionary
         of payments for each winning bidder to pay
@@ -77,7 +77,7 @@ class SecondPriceAuction(AuctionState):
     def __init__(self, prev=None):
         AuctionState.__init__(self, prev)
 
-    def paymentRule(self, bids):
+    def payment_rule(self, bids):
         """
         Winning bids should play price set in bid
         """
@@ -86,5 +86,5 @@ class SecondPriceAuction(AuctionState):
         # shift every bid to the one lower
         # use iter's __next__
         # return sortedBidders
-        return super().paymentRule(bids)
+        return super().payment_rule(bids)
 

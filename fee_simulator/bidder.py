@@ -1,17 +1,17 @@
 # Define bidder agent and their decision making process
 # Author: Frederico Lacs
 
-class FixedBidAgent():
+class fixed_bidAgent():
     """
     Agent bids a fixed value, with a fixed weight
     """
 
     def __init__(self, bid, weight):
-        self.fixedBid = bid
+        self.fixed_bid = bid
         self.fixedWeight = weight
 
-    def getBid(self, visibleBids):
-        return self.fixedBid, self.fixedWeight
+    def get_bid(self, visibleBids):
+        return self.fixed_bid, self.fixedWeight
 
 
 class MeanBidAgent():
@@ -23,7 +23,7 @@ class MeanBidAgent():
     def __init__(self, weight):
         self.weight = weight
 
-    def getBid(self, visibleBids):
+    def get_bid(self, visibleBids):
         # returns mean of visible bids
         bid = sum(bid.weight for bid in visibleBids) / len(visibleBids)
         return bid, self.weight

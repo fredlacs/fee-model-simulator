@@ -12,7 +12,7 @@ class NaiveAuctioneerAgent():
     def __init__(self):
         pass
     
-    def getAllocationRule(self, bids, weightLimit):
+    def get_allocation_rule(self, bids, weightLimit):
         """
         Return winning bids.
         This is the allocation rule.
@@ -30,7 +30,7 @@ class KnapsackAuctioneerAgent():
     def __init__(self):
         pass
 
-    def getAllocationRule(self, bids, weightLimit):
+    def get_allocation_rule(self, bids, weightLimit):
         """
         Selects highest bids
         """
@@ -40,4 +40,4 @@ class KnapsackAuctioneerAgent():
         # return {winner: bids[winner] for winner in winningBids}
 
         # take into account bid weights when selecting winning bids
-        return super().getAllocationRule(bids, weightLimit)
+        return super().get_allocation_rule(bids, weightLimit)

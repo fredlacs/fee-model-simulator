@@ -24,30 +24,30 @@ def runAuctions(outputfile, iterations):
 
         # 3 ticks for agents to place bids
         for bidder in bidders:
-            bid, weight = bidder.getBid(auction.getVisibleBids(bidder))
-            if bid: auction.addBid(bidder, bid, weight, timestep)
+            bid, weight = bidder.get_bid(auction.get_visible_bids(bidder))
+            if bid: auction.add_bid(bidder, bid, weight, timestep)
 
         for bidder in bidders:
-            bid, weight = bidder.getBid(auction.getVisibleBids(bidder))
-            if bid: auction.addBid(bidder, bid, weight, timestep)
+            bid, weight = bidder.get_bid(auction.get_visible_bids(bidder))
+            if bid: auction.add_bid(bidder, bid, weight, timestep)
         
         for bidder in bidders:
-            bid, weight = bidder.getBid(auction.getVisibleBids(bidder))
-            if bid: auction.addBid(bidder, bid, weight, timestep)
+            bid, weight = bidder.get_bid(auction.get_visible_bids(bidder))
+            if bid: auction.add_bid(bidder, bid, weight, timestep)
 
         # execute auction after 3 rounds are given for bids to be placed
         for auctioneer in auctioneers:
-            visibleBids = auction.getVisibleBids(auctioneer)
+            visibleBids = auction.get_visible_bids(auctioneer)
 
-            winningBids = auctioneer.getAllocationRule(visibleBids, auction.weightLimit)
+            winningBids = auctioneer.get_allocation_rule(visibleBids, auction.weightLimit)
             totalWeight = sum(bid.weight for bid in winningBids)
 
             if(totalWeight > auction.weightLimit):
                 raise AssertionError("The total weight of the bids exceeds the weight allowed")
             
             # apply auction's payment rule on winning bids
-            paymentResult = auction.paymentRule(winningBids)
-            auction.removeWinningBids(winningBids)
+            paymentResult = auction.payment_rule(winningBids)
+            auction.remove_winning_bids(winningBids)
             
             # store results
             for res in paymentResult:
