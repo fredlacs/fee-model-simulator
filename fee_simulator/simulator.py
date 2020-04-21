@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 
 @click.command()
 @click.option("--outputfile", default="results.csv", help="Simulation output filename", type=str)
-@click.option('--graph', is_flag=True)
+@click.option('--graph', is_flag=True, help="Plot graph with simulation results")
 @click.argument("iterations", type=int)
 def run_auctions(outputfile, graph, iterations):
     auction = FirstPriceAuction()
