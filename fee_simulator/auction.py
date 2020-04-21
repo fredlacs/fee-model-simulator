@@ -2,7 +2,7 @@
 # Author: Frederico Lacs
 
 class Bid:
-    def __init__(self, bidder, value, weight, creationTimestep):
+    def __init__(self, bidder, value, weight, creation_timestep):
         # Storing as a tuple may be more efficient?
         # 2d arrays will scale better when running many simulations
 
@@ -13,7 +13,7 @@ class Bid:
         # amount of gas used by the transaction
         self.weight = weight
         # timestep in which bid was created
-        self.creationTimestep = creationTimestep
+        self.creation_timestep = creation_timestep
         # if payment, payment == (timestep from win, payment price)
         self.payment = False
 
@@ -30,9 +30,9 @@ class AuctionState:
         # bids to current open auction
         self.bids = prev["bids"] if prev else []
         # bids that already won an auction
-        self.bidHistory = prev["bidHistory"] if prev else []
+        self.bid_history = prev["bid_history"] if prev else []
         # weight limit of bids allowed per auction
-        self.weightLimit = prev["weightLimit"] if prev else 11000000
+        self.weight_limit = prev["weight_limit"] if prev else 11000000
 
     def get_visible_bids(self, agent):
         """
@@ -42,12 +42,12 @@ class AuctionState:
         # TODO: logic for state information
         return self.bids
 
-    def add_bid(self, bidder, bid, weight, creationTimestep):
+    def add_bid(self, bidder, bid, weight, creation_timestep):
         # Double check this is a pass by reference
-        self.bids.append(Bid(bidder, bid, weight, creationTimestep))
+        self.bids.append(Bid(bidder, bid, weight, creation_timestep))
 
-    def remove_winning_bids(self, winningBids):
-        self.bids = [item for item in self.bids if item not in winningBids]
+    def remove_winning_bids(self, winning_bids):
+        self.bids = [item for item in self.bids if item not in winning_bids]
 
 
 
@@ -59,14 +59,14 @@ class FirstPriceAuction(AuctionState):
     def __init__(self, prev=None):
         AuctionState.__init__(self, prev)
 
-    def payment_rule(self, winningBids):
+    def payment_rule(self, winning_bids):
         """
         Closes the auction and returns dictionary
         of payments for each winning bidder to pay
         """
         # winning bids pay the value they set in First Price Auctions
         # so the values don't need to be changed
-        return winningBids
+        return winning_bids
 
 
 class SecondPriceAuction(AuctionState):

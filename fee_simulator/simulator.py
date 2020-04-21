@@ -9,14 +9,14 @@ import csv, click
 @click.command()
 @click.option("--outputfile", default="results.csv", help="Simulation output filename", type=str)
 @click.argument("iterations", type=int)
-def runAuctions(outputfile, iterations):
+def run_auctions(outputfile, iterations):
     auction = FirstPriceAuction()
     auctioneers = createAuctioneerPopulation()
     bidders = createBidderPopulation()
 
     csvfile = open(outputfile, 'w', newline='')
     writer = csv.writer(csvfile, dialect='excel')
-    writer.writerow(["timestep", "bidValue", "bidWeight", "creationTimestep"])
+    writer.writerow(["Timestep", "BidValue", "BidWeight", "CreationTimestep"])
 
     # Each iteration is one timestep of the simulation
     for timestep in range(iterations):
@@ -37,22 +37,22 @@ def runAuctions(outputfile, iterations):
 
         # execute auction after 3 rounds are given for bids to be placed
         for auctioneer in auctioneers:
-            visibleBids = auction.get_visible_bids(auctioneer)
+            visible_bids = auction.get_visible_bids(auctioneer)
 
-            winningBids = auctioneer.get_allocation_rule(visibleBids, auction.weightLimit)
-            totalWeight = sum(bid.weight for bid in winningBids)
+            winning_bids = auctioneer.get_allocation_rule(visible_bids, auction.weight_limit)
+            total_weight = sum(bid.weight for bid in winning_bids)
 
-            if(totalWeight > auction.weightLimit):
+            if(total_weight > auction.weight_limit):
                 raise AssertionError("The total weight of the bids exceeds the weight allowed")
             
             # apply auction's payment rule on winning bids
-            paymentResult = auction.payment_rule(winningBids)
-            auction.remove_winning_bids(winningBids)
+            payment_result = auction.payment_rule(winning_bids)
+            auction.remove_winning_bids(winning_bids)
             
             # store results
-            for res in paymentResult:
-                writer.writerow([timestep, res.value, res.weight, res.creationTimestep])
+            for res in payment_result:
+                writer.writerow([timestep, res.value, res.weight, res.creation_timestep])
 
 
 if __name__ == '__main__':
-    runAuctions()
+    run_auctions()

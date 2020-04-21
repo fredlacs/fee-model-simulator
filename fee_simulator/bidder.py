@@ -1,7 +1,7 @@
 # Define bidder agent and their decision making process
 # Author: Frederico Lacs
 
-class fixed_bidAgent():
+class FixedBidAgent():
     """
     Agent bids a fixed value, with a fixed weight
     """

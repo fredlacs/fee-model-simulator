@@ -19,6 +19,12 @@ class NaiveAuctioneerAgent():
 
         Selects first 3 bids as winning bids
         """
+        # naive approach w/o gas:
+        # sort dictionary from highest to lowest bid then select n winners
+        # winningBids = sorted(bids, key=bids.get, reverse=True)[:self.slotsPerAuction]
+        # return {winner: bids[winner] for winner in winningBids}
+
+        # take into account bid weights when selecting winning bids
         return bids[:3]
 
 
@@ -30,14 +36,11 @@ class KnapsackAuctioneerAgent():
     def __init__(self):
         pass
 
-    def get_allocation_rule(self, bids, weightLimit):
+    def get_allocation_rule(self, bids, capacity):
         """
         Selects highest bids
         """
-        # naive approach w/o gas:
-        # sort dictionary from highest to lowest bid then select n winners
-        # winningBids = sorted(bids, key=bids.get, reverse=True)[:self.slotsPerAuction]
-        # return {winner: bids[winner] for winner in winningBids}
+        from fee_simulator.knapsack import knapsack_dp
 
-        # take into account bid weights when selecting winning bids
+        picks = knapsack_dp(values, weights, n_items, capacity)
         return super().get_allocation_rule(bids, weightLimit)
