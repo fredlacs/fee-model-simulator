@@ -13,8 +13,8 @@ class TestAuction:
         bid2 = Bid("agent5", 1200, 7000, 4)
         prev = {
             "bids": [ bid1, bid2 ],
-            "bidHistory": [],
-            "weightLimit": 11000000
+            "bid_history": [],
+            "weight_limit": 11000000
         }
         state = AuctionState(prev=prev)
         assert len(state.bids) == 2
