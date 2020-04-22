@@ -11,8 +11,11 @@ class FixedBidAgent():
         self.fixed_bid = bid
         self.fixedWeight = weight
 
-    def get_bid(self, visible_bids):
-        return self.fixed_bid, self.fixedWeight
+    def get_bid(self, bid_history, visible_bids):
+        import random
+        if random.random() < 0.9:
+            return self.fixed_bid, self.fixedWeight
+
 
 
 class MeanBidAgent():
@@ -24,13 +27,14 @@ class MeanBidAgent():
         self.label = label
         self.weight = weight
 
-    def get_bid(self, visible_bids):
+    def get_bid(self, bid_history, visible_bids):
         # returns mean of visible bids
         if visible_bids:
+            # generator expression more memory efficient than list comprehension
             bid = sum(bid.value for bid in visible_bids) / len(visible_bids)
             return bid, self.weight
         else:
-            return False, False
+            return None
 
 class Web3PyAgent():
     """

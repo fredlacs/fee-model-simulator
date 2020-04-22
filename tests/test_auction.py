@@ -14,14 +14,14 @@ class TestAuction:
         prev = {
             "bids": [ bid1, bid2 ],
             "bid_history": [],
-            "weight_limit": 11000000
+            "initial_weight_limit": 11000000
         }
-        state = AuctionState(prev=prev)
-        assert len(state.bids) == 2
+        auction = FirstPriceAuction(prev=prev)
+        assert len(auction.bids) == 2
 
-        state.remove_winning_bids([bid1])
-        assert len(state.bids) == 1
-        assert state.bids[0] == bid2
+        auction.apply_payment_rule([bid1], 0)
+        assert len(auction.bids) == 1
+        assert auction.bids[0] == bid2
 
     def test_payment_dictionary(self):
         auction = FirstPriceAuction()

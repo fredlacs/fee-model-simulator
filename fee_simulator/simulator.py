@@ -26,17 +26,12 @@ def run_auctions(outputfile, graph, iterations):
         print(f"Executing auction number {timestep+1}")
 
         # 3 ticks for agents to place bids
-        for bidder in bidders:
-            bid, weight = bidder.get_bid(auction.get_visible_bids(bidder))
-            if bid: auction.add_bid(bidder.label, bid, weight, timestep)
-
-        for bidder in bidders:
-            bid, weight = bidder.get_bid(auction.get_visible_bids(bidder))
-            if bid: auction.add_bid(bidder.label, bid, weight, timestep)
-        
-        for bidder in bidders:
-            bid, weight = bidder.get_bid(auction.get_visible_bids(bidder))
-            if bid: auction.add_bid(bidder.label, bid, weight, timestep)
+        for i in range(3):
+            for bidder in bidders:
+                bid = bidder.get_bid(auction.bid_history, auction.get_visible_bids(bidder))
+                if bid is not None:
+                    # bid[0] == value, bid[1] == weight
+                    auction.add_bid(bidder.label, bid[0], bid[1], timestep)
 
         # execute auction after 3 rounds are given for bids to be placed
         for auctioneer in auctioneers:
@@ -71,7 +66,7 @@ def run_auctions(outputfile, graph, iterations):
         plt.xlabel('Simulation Timestep')
         plt.ylabel('Price Paid per Transaction by Agent')
 
-        for label in [bidder.label for bidder in bidders]:
+        for label in (bidder.label for bidder in bidders):
             x = []
             y = []
 
@@ -81,7 +76,8 @@ def run_auctions(outputfile, graph, iterations):
                     y.append(bid.payment.price)
             
             # add results for current label to graph plot
-            plt.plot(x, y, label=label)
+            # plt.plot(x, y, label=label)
+            plt.scatter(x, y, label=label, alpha=0.5, s=2)
 
         plt.legend(loc='best')
         plt.show()
