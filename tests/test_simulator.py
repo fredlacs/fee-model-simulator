@@ -18,5 +18,5 @@ def test_csv_output():
   assert result.output == "Executing auction number 1\n"
 
   file = open("resultsTest.csv", 'r', newline='')
-  assert "Timestep,BidValue,BidWeight,CreationTimestep" in file.read()
+  assert "Bidder,BidValue,BidWeight,CreationTimestep,TimestepPaid" in file.read()
 

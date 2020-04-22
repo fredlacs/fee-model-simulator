@@ -6,11 +6,12 @@ class FixedBidAgent():
     Agent bids a fixed value, with a fixed weight
     """
 
-    def __init__(self, bid, weight):
+    def __init__(self, label, bid, weight):
+        self.label = label
         self.fixed_bid = bid
         self.fixedWeight = weight
 
-    def get_bid(self, visibleBids):
+    def get_bid(self, visible_bids):
         return self.fixed_bid, self.fixedWeight
 
 
@@ -19,11 +20,27 @@ class MeanBidAgent():
     Agent bids the mean of visible bids
     """
 
-    # TODO: use np's normal distribution for weight
-    def __init__(self, weight):
+    def __init__(self, label, weight):
+        self.label = label
         self.weight = weight
 
-    def get_bid(self, visibleBids):
+    def get_bid(self, visible_bids):
         # returns mean of visible bids
-        bid = sum(bid.weight for bid in visibleBids) / len(visibleBids)
-        return bid, self.weight
+        if visible_bids:
+            bid = sum(bid.value for bid in visible_bids) / len(visible_bids)
+            return bid, self.weight
+        else:
+            return False, False
+
+class Web3PyAgent():
+    """
+    Agent bids using web3
+    """
+
+    def __init__(self, label, weight=21000):
+        self.label = label
+        self.weight = weight
+    
+    def get_bid(self, visible_bids):
+        # import web3py
+        return 0, 0

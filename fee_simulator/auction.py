@@ -1,20 +1,25 @@
 # Define auction
 # Author: Frederico Lacs
 
+from collections import namedtuple
+Payment = namedtuple("Payment", ["timestep", "price"])
+
+
 class Bid:
     def __init__(self, bidder, value, weight, creation_timestep):
-        # Storing as a tuple may be more efficient?
+        # TODO: exploring if storing as a tuple may be more efficient
         # 2d arrays will scale better when running many simulations
+        if value < 0: raise AssertionError("Bids can't have a negative value")
 
         # agent who placed the bid, an Ethereum externally owned account
         self.bidder = bidder
-        # the transaction fee paid by bidder (gasprice * gas used)
+        # the gas price set on an Ethereum transaction
         self.value = value
         # amount of gas used by the transaction
         self.weight = weight
         # timestep in which bid was created
         self.creation_timestep = creation_timestep
-        # if payment, payment == (timestep from win, payment price)
+        # if payment, payment == Payment(timestep, price)
         self.payment = False
 
 
@@ -32,7 +37,7 @@ class AuctionState:
         # bids that already won an auction
         self.bid_history = prev["bid_history"] if prev else []
         # weight limit of bids allowed per auction
-        self.weight_limit = prev["weight_limit"] if prev else 11000000
+        self.initial_weight_limit = prev["initial_weight_limit"] if prev else 11000000
 
     def get_visible_bids(self, agent):
         """
@@ -45,9 +50,12 @@ class AuctionState:
     def add_bid(self, bidder, bid, weight, creation_timestep):
         # Double check this is a pass by reference
         self.bids.append(Bid(bidder, bid, weight, creation_timestep))
-
-    def remove_winning_bids(self, winning_bids):
-        self.bids = [item for item in self.bids if item not in winning_bids]
+    
+    
+    def get_weight_limit(self):
+        # this value may change over time
+        current_weight_limit = self.initial_weight_limit
+        return current_weight_limit
 
 
 
@@ -59,14 +67,20 @@ class FirstPriceAuction(AuctionState):
     def __init__(self, prev=None):
         AuctionState.__init__(self, prev)
 
-    def payment_rule(self, winning_bids):
+    def apply_payment_rule(self, winning_bids, current_timestep):
         """
-        Closes the auction and returns dictionary
-        of payments for each winning bidder to pay
+        Closes the auction and executes payments for each winning bidder
         """
         # winning bids pay the value they set in First Price Auctions
         # so the values don't need to be changed
-        return winning_bids
+        for bid in winning_bids:
+            # payment is gas price * gas used
+            bid.payment = Payment(current_timestep, bid.value * bid.weight)
+        
+        # remove winning bids from mempool
+        self.bids = [item for item in self.bids if item not in winning_bids]
+        # add bids to auction history
+        self.bid_history.extend(winning_bids)
 
 
 class SecondPriceAuction(AuctionState):
@@ -77,7 +91,7 @@ class SecondPriceAuction(AuctionState):
     def __init__(self, prev=None):
         AuctionState.__init__(self, prev)
 
-    def payment_rule(self, bids):
+    def apply_payment_rule(self, bids):
         """
         Winning bids should play price set in bid
         """
@@ -86,5 +100,5 @@ class SecondPriceAuction(AuctionState):
         # shift every bid to the one lower
         # use iter's __next__
         # return sortedBidders
-        return super().payment_rule(bids)
+        return super().apply_payment_rule(bids)
 
