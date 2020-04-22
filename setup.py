@@ -6,9 +6,9 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        'Click',
-        'ortools',
-        'matplotlib'
+        'click==7.1.1',
+        'ortools==7.5.7466',
+        'matplotlib==3.2.1',
     ],
     entry_points='''
         [console_scripts]
