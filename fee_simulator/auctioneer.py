@@ -31,7 +31,7 @@ class KnapsackAuctioneerAgent():
         # https://developers.google.com/optimization/reference/python/algorithms/pywrapknapsack_solver
         solver = pywrapknapsack_solver.KnapsackSolver(
             pywrapknapsack_solver.KnapsackSolver.
-            KNAPSACK_MULTIDIMENSION_BRANCH_AND_BOUND_SOLVER, 'KnapsackBids')
+            KNAPSACK_DYNAMIC_PROGRAMMING_SOLVER, 'KnapsackBids')
 
         solver.Init(values, weights, capacities)
         computed_value = solver.Solve()

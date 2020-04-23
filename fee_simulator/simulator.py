@@ -16,7 +16,7 @@ def run_auctions(outputfile, graph, iterations):
     auction = FirstPriceAuction(prev={
             "bids": [ Bid("GenesisTx", 1, 21000, 0) ],
             "bid_history": [],
-            "initial_weight_limit": 10000000
+            "initial_weight_limit": 100000 # 0
         })
     auctioneers = createAuctioneerPopulation()
     bidders = createBidderPopulation()

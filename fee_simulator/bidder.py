@@ -1,6 +1,7 @@
 # Define bidder agent and their decision making process
 # Author: Frederico Lacs
 import numpy as np
+import statistics
 
 class Bidder():
     """
@@ -28,41 +29,33 @@ class FixedBidAgent():
 
     def get_bid(self, bid_history, visible_bids, curr_timestep):
         import random
-        if random.random() < 0.9:
+        if random.random() < 0.1:
             return self.fixed_bid, self.fixedWeight
 
 
-class MeanBidAgent():
+class NethereumAgent(Bidder):
     """
-    Agent bids the mean of visible bids
-    """
-
-    def __init__(self, label="Mean bid", weight=0):
-        self.label = label
-        self.weight = weight
-
-    def get_bid(self, bid_history, visible_bids, curr_timestep):
-        # returns mean of visible bids
-        if visible_bids:
-            # generator expression more memory efficient than list comprehension
-            bid = sum(bid.value for bid in visible_bids) / len(visible_bids)
-            return bid, self.weight
-        else:
-            return None
-
-
-class Web3PyAgent():
-    """
-    Agent bids using web3
+    Agent bids using Nethereum gas price
     """
 
-    def __init__(self, label, weight):
-        self.label = label
-        self.weight = weight
+    def __init__(self, label, valuation, weight, n_blocks=100):
+        Bidder.__init__(self, label, valuation, weight)
+        self.n_blocks = n_blocks
     
     def get_bid(self, bid_history, visible_bids, curr_timestep):
-        # import web3py
-        return 0, 0
+        # if not enough blocks made, only look at available ones
+        n_blocks = self.n_blocks if curr_timestep - self.n_blocks > 0 else curr_timestep
+
+        bids = [bid.value for bid in bid_history
+            if bid.payment_timestep >= curr_timestep - n_blocks]
+
+        if bids:
+            value = statistics.mean(bids)
+            # only place bid if the cost is smaller than valuation
+            if value < self.valuation:
+                return value, self.weight
+        else:
+            return None
 
 
 class GethAgent(Bidder):
@@ -80,7 +73,7 @@ class GethAgent(Bidder):
         n_blocks = self.n_blocks if curr_timestep - self.n_blocks > 0 else curr_timestep
 
         bids = [bid.value for bid in bid_history
-            if bid.payment_timestep > curr_timestep - n_blocks]
+            if bid.payment_timestep >= curr_timestep - n_blocks]
 
         if bids:
             value = np.percentile(bids, self.percentile)
@@ -89,3 +82,56 @@ class GethAgent(Bidder):
                 return value, self.weight
         else:
             return None
+
+
+class EthGasStationAgent(Bidder):
+    """
+    Agent bids using ethgasstation prediction
+    """
+
+    def __init__(self, label, valuation, weight, bid_speed, n_blocks = 200):
+        Bidder.__init__(self, label, valuation, weight)
+        
+        if bid_speed == 0:
+            self.percentile = 35 # safe low
+        elif bid_speed == 1:
+            self.percentile = 60 # standard
+        elif bid_speed == 2:
+            self.percentile = 90 # fast
+        else:
+            raise AssertionError("Bid speed not recognised")
+
+        self.n_blocks = n_blocks
+    
+    def get_bid(self, bid_history, visible_bids, curr_timestep):
+        # if not enough blocks made, only look at available ones
+        n_blocks = self.n_blocks if curr_timestep - self.n_blocks > 0 else curr_timestep
+
+        bids = [bid.value for bid in bid_history
+            if bid.payment_timestep >= curr_timestep - n_blocks]
+
+        return None
+
+
+class Web3jsAgent(Bidder):
+    """
+    """
+    def __init__(self, label, valuation, weight, n_blocks=100):
+        Bidder.__init__(self, label, valuation, weight)
+        self.n_blocks = n_blocks
+    
+    def get_bid(self, bid_history, visible_bids, curr_timestep):
+        n_blocks = self.n_blocks if curr_timestep - self.n_blocks > 0 else curr_timestep
+
+        bids = [bid.value for bid in bid_history
+            if bid.payment_timestep >= curr_timestep - n_blocks]
+
+        if bids:
+            # return median of latest bids
+            value = statistics.median(bids)
+            # only place bid if the cost is smaller than valuation
+            if value < self.valuation:
+                return value, self.weight
+        else:
+            return None
+
