@@ -16,7 +16,7 @@ def run_auctions(outputfile, graph, iterations):
     auction = FirstPriceAuction(prev={
             "bids": [ Bid("GenesisTx", 1, 21000, 0) ],
             "bid_history": [],
-            "initial_weight_limit": 11000000
+            "initial_weight_limit": 10000000
         })
     auctioneers = createAuctioneerPopulation()
     bidders = createBidderPopulation()
@@ -28,7 +28,7 @@ def run_auctions(outputfile, graph, iterations):
         # 3 ticks for agents to place bids
         for i in range(3):
             for bidder in bidders:
-                bid = bidder.get_bid(auction.bid_history, auction.get_visible_bids(bidder))
+                bid = bidder.get_bid(auction.bid_history, auction.get_visible_bids(bidder), timestep)
                 if bid is not None:
                     # bid[0] == value, bid[1] == weight
                     auction.add_bid(bidder.label, bid[0], bid[1], timestep)
@@ -57,7 +57,7 @@ def run_auctions(outputfile, graph, iterations):
     writer.writerow(["Bidder", "BidValue", "BidWeight", "CreationTimestep", "TimestepPaid"])
 
     for bid in auction.bid_history:
-        entry = [bid.bidder, bid.value, bid.weight, bid.creation_timestep, bid.payment.timestep]
+        entry = [bid.bidder, bid.value, bid.weight, bid.creation_timestep, bid.payment_timestep]
         writer.writerow(entry)
 
     # display data visualisation if --graph flag is used on cli
@@ -72,8 +72,8 @@ def run_auctions(outputfile, graph, iterations):
 
             for bid in auction.bid_history:
                 if label == bid.bidder:
-                    x.append(bid.payment.timestep)
-                    y.append(bid.payment.price)
+                    x.append(bid.payment_timestep)
+                    y.append(bid.value)
             
             # add results for current label to graph plot
             # plt.plot(x, y, label=label)
