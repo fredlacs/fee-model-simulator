@@ -23,11 +23,11 @@ class Bidder():
 
 class TruthfulBidAgent(Bidder):
     """
-    Agent bids its valuation, with a fixed weight
+    Agent bids its valuation
     """
 
-    def __init__(self, label, valuation, weight):
-        Bidder.__init__(self, label, valuation, weight, bid_prob=0.1)
+    def __init__(self, label, valuation, weight, bid_prob=0.1):
+        Bidder.__init__(self, label, valuation, weight, bid_prob=bid_prob)
 
     def get_bid(self, bid_history, visible_bids, curr_timestep):
         if self.should_bid():
@@ -36,7 +36,7 @@ class TruthfulBidAgent(Bidder):
 
 class NethereumAgent(Bidder):
     """
-    Agent bids using Nethereum gas price
+   Agent bids using Nethereum gas price prediction
     """
 
     def __init__(self, label, valuation, weight, n_blocks=100):
@@ -62,7 +62,7 @@ class NethereumAgent(Bidder):
 
 class GethAgent(Bidder):
     """
-    Agent bids using geth gas price
+    Agent bids using Geth gas price prediction
     """
 
     def __init__(self, label, valuation, weight, n_blocks=20, percentile=60):
@@ -87,7 +87,7 @@ class GethAgent(Bidder):
 
 class EthGasStationAgent(Bidder):
     """
-    Agent bids using ethgasstation prediction
+    Agent bids using EthGasStation gas price prediction
     """
 
     def __init__(self, label, valuation, weight, bid_speed, n_blocks = 200):
@@ -125,6 +125,7 @@ class EthGasStationAgent(Bidder):
 
 class Web3jsAgent(Bidder):
     """
+    Agent bids using web3js gas price prediction
     """
     def __init__(self, label, valuation, weight, n_blocks=100):
         Bidder.__init__(self, label, valuation, weight)
