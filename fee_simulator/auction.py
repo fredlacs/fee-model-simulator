@@ -6,6 +6,10 @@ Payment = namedtuple("Payment", ["timestep", "price"])
 
 
 class Bid:
+    """
+    A bid containsthe value and weight of a transaction to be paid by a bidder
+    If selected as a winning bid in an auction
+    """
     def __init__(self, bidder, value, weight, creation_timestep, payment_timestep=None):
         # TODO: exploring if storing as a tuple may be more efficient
         # 2d arrays will scale better when running many simulations
@@ -84,23 +88,3 @@ class FirstPriceAuction(AuctionState):
         self.bids = [item for item in self.bids if item not in winning_bids]
         # add bids to auction history
         self.bid_history.extend(winning_bids)
-
-
-# class SecondPriceAuction(AuctionState):
-#     """
-#     Second price auction payment rule
-#     """
-
-#     def __init__(self, prev=None):
-#         AuctionState.__init__(self, prev)
-
-#     def apply_payment_rule(self, bids):
-#         """
-#         Winning bids should play price set in bid
-#         """
-#         # sort dictionary from highest to lowest bid
-#         # sortedBidders = sorted(bids, key=bids.get, reverse=True)
-#         # shift every bid to the one lower
-#         # use iter's __next__
-#         # return sortedBidders
-#         return super().apply_payment_rule(bids)
