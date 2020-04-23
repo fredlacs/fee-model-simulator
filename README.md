@@ -19,17 +19,16 @@ Install the CLI application
 python3 setup.py install
 ```
 
-
-CLI syntax
-```bash
-feesim [number of simulations] --outputfile [optional output filename] 
-```
-
+Run simulations:
 ```bash
 feesim 1000
+feesim 1000 --graph_each
+feesim 1000 --graph_avg
 feesim 1000 --outputfile results2.csv
 ```
 
+The --graph_each flag allows you to visualise all bids in a graph.
+The --graph_avg flag allows you to visualise the avg bid per auction in a graph.
 
 ## Test Cases
 First install pytest

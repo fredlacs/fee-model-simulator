@@ -9,9 +9,10 @@ import matplotlib.pyplot as plt
 
 @click.command()
 @click.option("--outputfile", default="results.csv", help="Simulation output filename", type=str)
-@click.option('--graph', is_flag=True, help="Plot graph with simulation results")
+@click.option('--graph_each', is_flag=True, help="Plot graph with simulation results labeling each agent")
+@click.option('--graph_avg', is_flag=True, help="Plot graph with simulation results and avg bid price")
 @click.argument("iterations", type=int)
-def run_auctions(outputfile, graph, iterations):
+def run_auctions(outputfile, graph_each, graph_avg, iterations):
     # create auction starting with genesis transaction of cost 1
     auction = FirstPriceAuction(prev={
             "bids": [ Bid("GenesisTx", 1, 21000, 0) ],
@@ -60,8 +61,8 @@ def run_auctions(outputfile, graph, iterations):
         entry = [bid.bidder, bid.value, bid.weight, bid.creation_timestep, bid.payment_timestep]
         writer.writerow(entry)
 
-    # display data visualisation if --graph flag is used on cli
-    if graph:
+    # display data visualisation if --graphEach flag is used on cli
+    if graph_each:
         plt.title('Auction simulation results')
         plt.xlabel('Simulation Timestep')
         plt.ylabel('Price Paid per Transaction by Agent')
@@ -76,9 +77,29 @@ def run_auctions(outputfile, graph, iterations):
                     y.append(bid.value)
             
             # add results for current label to graph plot
-            # plt.plot(x, y, label=label)
             plt.scatter(x, y, label=label, alpha=0.5, s=2)
 
+        # plt.plot([bid.payment_timestep for bid in auction.bid_history],
+        #     [bid.value for bid in auction.bid_history], label="Gas Price Paid")
+        plt.legend(loc='best')
+        plt.show()
+
+    # display data visualisation if --graphAvg flag is used on cli
+    if graph_avg:
+        plt.title('Auction simulation results')
+        plt.xlabel('Simulation Timestep')
+        plt.ylabel('Average Price Paid per Transaction by Block')
+
+        # unique timesteps in the history
+        x = list(set(bid.creation_timestep for bid in auction.bid_history))
+        y = []
+
+        import statistics
+        for timestep in x:
+            bids_accepted = [bid.value for bid in auction.bid_history if bid.creation_timestep == timestep]
+            y.append(statistics.mean(bids_accepted))
+
+        plt.plot(x, y, label="Avg Gas Price Paid")
         plt.legend(loc='best')
         plt.show()
 
