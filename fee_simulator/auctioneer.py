@@ -8,7 +8,7 @@ Agent that selects winning bids in an auction
 
 class KnapsackAuctioneerAgent():
     """
-    Knapsack optimisation on bids
+    Performs a knapsack optimisation when selecting winning bids
     """
 
     def __init__(self):
@@ -16,7 +16,7 @@ class KnapsackAuctioneerAgent():
 
     def get_allocation_rule(self, bids, weight_limit):
         """
-        Selects highest bids using branch and bound optimisation technique
+        Selects highest bids using dynamic programming optimisation technique
         """
         values = []
         weights = [[]]

@@ -7,6 +7,9 @@ from fee_simulator.auctioneer import KnapsackAuctioneerAgent
 import numpy as np
 
 def createBidderPopulation():
+    """
+    Generates population of bidders for simulation
+    """
     # gas cost of making an eth transfer
     TX_GAS_COST = 21000
 
@@ -31,4 +34,7 @@ def createBidderPopulation():
     return bidders
 
 def createAuctioneerPopulation():
+    """
+    Generates population of auctioneers for simulation
+    """
     return [ KnapsackAuctioneerAgent() ]

@@ -13,6 +13,12 @@ import matplotlib.pyplot as plt
 @click.option('--graph_avg', is_flag=True, help="Plot graph with simulation results and avg bid price")
 @click.argument("iterations", type=int)
 def run_auctions(outputfile, graph_each, graph_avg, iterations):
+    """
+    Provides the main entry point for simulating auctions.
+    Runs for the set number of iterations, outputting the results as a csv file.
+
+    Optionally allows the results to be visualised in tables.
+    """
     # create auction starting with genesis transaction of cost 1
     auction = FirstPriceAuction(prev={
             "bids": [ Bid("GenesisTx", 1, 21000, 0) ],
@@ -79,8 +85,6 @@ def run_auctions(outputfile, graph_each, graph_avg, iterations):
             # add results for current label to graph plot
             plt.scatter(x, y, label=label, alpha=0.5, s=2)
 
-        # plt.plot([bid.payment_timestep for bid in auction.bid_history],
-        #     [bid.value for bid in auction.bid_history], label="Gas Price Paid")
         plt.legend(loc='best')
         plt.show()
 
