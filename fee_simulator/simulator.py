@@ -6,9 +6,7 @@ from fee_simulator.population import createAuctioneerPopulation, createBidderPop
 def simulate_auction(iterations):
     """
     Provides the main entry point for simulating auctions.
-    Runs for the set number of iterations, outputting the results as a csv file.
-
-    Optionally allows the results to be visualised in tables.
+    Runs for the set number of iterations.
     """
     # create auction starting with genesis transaction of cost 1
     auction = FirstPriceAuction(prev={
