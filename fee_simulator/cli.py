@@ -9,6 +9,11 @@ from fee_simulator.simulator import simulate_auction
 @click.option('--graph_avg', is_flag=True, help="Plot graph with simulation results and avg bid price")
 @click.argument("iterations", type=int)
 def run(outputfile, graph_each, graph_avg, iterations):
+    """
+    A wrapper around the auction simulation to allow it to be called as a CLI application.
+    Exports data into a csv file, and allows for visualisation.
+    """
+    # runs auction the requested number of times
     bids = simulate_auction(iterations)
     
     # export results to csv format

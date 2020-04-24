@@ -49,4 +49,3 @@ def simulate_auction(iterations):
             auction.apply_payment_rule(winning_bids, timestep)
 
     return auction.bid_history
-
