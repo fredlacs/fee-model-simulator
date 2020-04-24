@@ -13,6 +13,6 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        feesim=fee_simulator.simulator:run_auctions
+        feesim=fee_simulator.cli:run
     ''',
 )
