@@ -9,7 +9,7 @@ setup(
         'click==7.1.1',
         'ortools==7.5.7466',
         'matplotlib==3.2.1',
-        'numpy==1.18.3',
+        'numpy==1.22.0',
     ],
     entry_points='''
         [console_scripts]
